@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171a21" />
+    <title>Hardware Tycoon</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #171a21; color: #f3f4f6; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; }
+      main { width: min(42rem, calc(100% - 2rem)); padding: 2rem; border: 1px solid #3b4252; border-radius: 0.75rem; background: #222733; }
+      h1 { margin-top: 0; }
+      p { line-height: 1.6; color: #c5cad3; }
+      code { color: #a8d5ff; }
+      a { color: #8bc5ff; }
+      .status { color: #ffd479; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Hardware Tycoon</h1>
+      <p class="status" id="status">Checking for the Godot Web export…</p>
+      <p id="details" hidden></p>
+    </main>
+    <script type="module">
+      const status = document.querySelector('#status');
+      const details = document.querySelector('#details');
+
+      try {
+        const response = await fetch('./game.html', { method: 'HEAD' });
+        if (response.ok) {
+          window.location.replace('./game.html');
+        } else {
+          status.textContent = 'The Godot Web export has not been added yet.';
+          details.hidden = false;
+          details.innerHTML = 'This repository contains the Godot source project, but StackBlitz cannot export it. Export the project from Godot using the <code>Web</code> preset, and place the generated files (including <code>game.html</code>, <code>.wasm</code>, and <code>.pck</code>) in <code>build/web/</code>. Then restart the preview.';
+        }
+      } catch (error) {
+        status.textContent = 'Could not load the Godot Web export.';
+        details.hidden = false;
+        details.textContent = `Preview error: ${error.message}`;
+      }
+    </script>
+  </body>
+</html>
